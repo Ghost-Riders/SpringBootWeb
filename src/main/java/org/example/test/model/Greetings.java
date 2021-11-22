@@ -1,16 +1,21 @@
 package org.example.test.model;
 
-import java.math.BigInteger;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
+@Entity
 public class Greetings {
-	private BigInteger id;
+	@Id
+	@GeneratedValue
+	private Long id;
 	private String text;
 
-	public BigInteger getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(BigInteger id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

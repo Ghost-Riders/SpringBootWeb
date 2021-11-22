@@ -1,6 +1,5 @@
 package org.example.test.service;
 
-import java.math.BigInteger;
 import java.util.Collection;
 
 import org.example.test.model.Greetings;
@@ -8,12 +7,12 @@ import org.example.test.model.Greetings;
 public interface GreetingService {
 	Collection<Greetings> findAll();
 
-	Greetings findOne(BigInteger id);
+	Greetings findOne(long id);
 
 	Greetings createGreeting(Greetings greetings);
 
 	Greetings updateGreeting(Greetings greetings);
 
-	void deleteGreeting(BigInteger id);
+	void deleteGreeting(long id);
 
 }

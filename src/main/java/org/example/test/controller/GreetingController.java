@@ -1,6 +1,5 @@
 package org.example.test.controller;
 
-import java.math.BigInteger;
 import java.util.Collection;
 
 import org.example.test.model.Greetings;
@@ -28,7 +27,7 @@ public class GreetingController {
 	}
 
 	@RequestMapping(value = "/api/greetings/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Greetings> getGreeting(@PathVariable("id") BigInteger id) {
+	public ResponseEntity<Greetings> getGreeting(@PathVariable("id") Long id) {
 		Greetings greeting = greetingService.findOne(id);
 		if (greeting == null) {
 			return new ResponseEntity<Greetings>(HttpStatus.NOT_FOUND);
@@ -53,7 +52,7 @@ public class GreetingController {
 	}
 
 	@RequestMapping(value = "/api/greetings/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Greetings> deleteGreeting(@PathVariable("id") BigInteger id) {
+	public ResponseEntity<Greetings> deleteGreeting(@PathVariable("id") Long id) {
 		greetingService.deleteGreeting(id);
 		return new ResponseEntity<Greetings>(HttpStatus.NO_CONTENT);
 	}
