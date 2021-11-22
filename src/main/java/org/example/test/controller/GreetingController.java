@@ -54,6 +54,7 @@ public class GreetingController {
 
 	@RequestMapping(value = "/api/greetings/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Greetings> deleteGreeting(@PathVariable("id") BigInteger id) {
+		greetingService.deleteGreeting(id);
 		return new ResponseEntity<Greetings>(HttpStatus.NO_CONTENT);
 	}
 
