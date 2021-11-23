@@ -7,9 +7,11 @@ import org.example.test.service.GreetingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+@Profile("batch")
 @Component
 public class GreetingBatchBean {
 	@Autowired
@@ -19,7 +21,7 @@ public class GreetingBatchBean {
 	final static Logger LOGGER = LoggerFactory.getLogger(GreetingBatchBean.class);
 
 	// will run for every 30 secon after application start
-//	@Scheduled(cron = "0,30 * * * * *")
+//	@Scheduled(cron = "${batch.greeting.cron}")
 	public void cronJob() {
 		LOGGER.info("CronJob");
 		System.out.println("Running crontab");
@@ -30,7 +32,7 @@ public class GreetingBatchBean {
 
 	// will run first at 5 second and after that 10 sec[because 15 sec after app
 	// start
-//	@Scheduled(initialDelay = 5000, fixedRate = 15000)
+//	@Scheduled(initialDelayString = "${batch.greeting.initialDelay}", fixedRateString = "${batch.greeting.fixedRate}")
 	public void fixedRateJobWtihInitialDelay() {
 		LOGGER.info(">fixedRateJobWtihInitialDelay");
 		long pause = 5000;
@@ -45,7 +47,7 @@ public class GreetingBatchBean {
 	}
 
 	// will run first 5 sec, continued and run after 15 sec
-	@Scheduled(initialDelay = 5000, fixedDelay = 15000)
+	@Scheduled(initialDelayString = "${batch.greeting.initialDelay}", fixedDelayString = "${batch.greeting.fixedDelay}")
 	public void fixedDelayJobWtihInitialDelay() {
 		LOGGER.info(">fixedDelayJobWithInitialdelay");
 		long pause = 5000;
