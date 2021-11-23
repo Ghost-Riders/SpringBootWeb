@@ -6,8 +6,11 @@ import org.example.test.model.Greetings;
 import org.example.test.repository.GreetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 public class GreetingServiceBean implements GreetingService {
 
 	@Autowired
@@ -26,15 +29,20 @@ public class GreetingServiceBean implements GreetingService {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public Greetings createGreeting(Greetings greetings) {
 		if (greetings.getId() != null) {
 			return null;
 		}
 		Greetings createGreeting = greetingRepository.save(greetings);
+		if (greetings.getId() == 7L) {
+			throw new RuntimeException("Roll me back");
+		}
 		return createGreeting;
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public Greetings updateGreeting(Greetings greetings) {
 		if (greetings.getId() == null) {
 			return null;
@@ -44,6 +52,7 @@ public class GreetingServiceBean implements GreetingService {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public void deleteGreeting(long id) {
 		greetingRepository.deleteById(id);
 	}
