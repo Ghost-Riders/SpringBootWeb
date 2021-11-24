@@ -52,16 +52,17 @@ public class GreetingServiceBean implements GreetingService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-	//cache issue for test case
-//	@CachePut(value = "greetings", key = "#greetings.id")
-	public Greetings updateGreeting(Greetings greetingToUpdate) {
-		if (greetingToUpdate.getId() == null) {
+	@CachePut(value = "greetings", key = "#greeting.id")
+	public Greetings updateGreeting(Greetings greeting) {
+		if (greeting.getId() == null) {
 			throw new NoResultException("Requested entity not found");
 		}
-		Optional<Greetings> optionsGreeting=greetingRepository.findById(greetingToUpdate.getId());
+		Optional<Greetings> optionsGreeting=greetingRepository.findById(greeting.getId());
 		if(!optionsGreeting.isPresent()) {
 			throw new NoResultException();
 		}
+		Greetings greetingToUpdate = optionsGreeting.get();
+		greetingToUpdate.setText(greeting.getText());
 		Greetings updateGreeting = greetingRepository.save(greetingToUpdate);
 		return updateGreeting;
 	}

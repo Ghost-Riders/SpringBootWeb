@@ -117,7 +117,7 @@ public class GreetingServiceTest extends AbstractTest {
 
 		String updatedText = entity.getText() + " test";
 		entity.setText(updatedText);
-		//Cache issue 
+
 		Greetings updatedEntity = service.updateGreeting(entity);
 
 		Assert.assertNotNull("failure - expected not null", updatedEntity);
