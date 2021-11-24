@@ -1,6 +1,10 @@
 package org.example.test.service;
 
 import java.util.Collection;
+import java.util.Optional;
+
+import javax.persistence.EntityExistsException;
+import javax.persistence.NoResultException;
 
 import org.example.test.model.Greetings;
 import org.example.test.repository.GreetingRepository;
@@ -28,7 +32,7 @@ public class GreetingServiceBean implements GreetingService {
 	@Override
 	@Cacheable(value = "greetings", key = "#id")
 	public Greetings findOne(long id) {
-		Greetings greeting = greetingRepository.findById(id).get();
+		Greetings greeting = greetingRepository.findById(id).orElse(null);
 		return greeting;
 	}
 
@@ -37,7 +41,7 @@ public class GreetingServiceBean implements GreetingService {
 	@CachePut(value = "greetings", key = "#result.id")
 	public Greetings createGreeting(Greetings greetings) {
 		if (greetings.getId() != null) {
-			return null;
+			throw new EntityExistsException("Id must be null to persist");
 		}
 		Greetings createGreeting = greetingRepository.save(greetings);
 		if (greetings.getId() == 7L) {
@@ -48,12 +52,17 @@ public class GreetingServiceBean implements GreetingService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-	@CachePut(value = "greetings", key = "#greetings.id")
-	public Greetings updateGreeting(Greetings greetings) {
-		if (greetings.getId() == null) {
-			return null;
+	//cache issue for test case
+//	@CachePut(value = "greetings", key = "#greetings.id")
+	public Greetings updateGreeting(Greetings greetingToUpdate) {
+		if (greetingToUpdate.getId() == null) {
+			throw new NoResultException("Requested entity not found");
 		}
-		Greetings updateGreeting = greetingRepository.save(greetings);
+		Optional<Greetings> optionsGreeting=greetingRepository.findById(greetingToUpdate.getId());
+		if(!optionsGreeting.isPresent()) {
+			throw new NoResultException();
+		}
+		Greetings updateGreeting = greetingRepository.save(greetingToUpdate);
 		return updateGreeting;
 	}
 
